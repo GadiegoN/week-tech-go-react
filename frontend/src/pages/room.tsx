@@ -1,10 +1,12 @@
 import { useParams } from "react-router-dom"
 import logo from "@/assets/logo.svg"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, Share2 } from "lucide-react"
-import { Input } from "@/components/ui/input"
+import { Share2 } from "lucide-react"
+
 import { toast } from "sonner"
-import { Message } from "@/components/message"
+import { Messages } from "@/components/messages"
+import { Suspense } from "react"
+import { CreateMessageForm } from "@/components/create-message-form"
 
 export function Room() {
 
@@ -18,14 +20,11 @@ export function Room() {
 
         } else {
             navigator.clipboard.writeText(url)
-            toast.info("Link copiado com sucesso.")
+            toast.info("Link copiado para área de transferência.")
         }
 
     }
 
-    function handleCreateComment() {
-        console.log("comment")
-    }
 
     return (
         <div className="mx-auto max-w-2xl flex flex-col gap-6 py-10 px-4">
@@ -44,28 +43,11 @@ export function Room() {
 
             <div className="h-px w-full bg-secondary" />
 
-            <form
-                action={handleCreateComment}
-                className="flex items-center gap-2 rounded-xl border-2 ring-primary ring-offset-2 ring-offset-background focus-within:ring-1"
-            >
-                <Input name="theme" type="text" placeholder="Qual a sua pergunta?" autoComplete="off" className="" />
-                <Button size="sm">
-                    Criar pergunta
-                    <ArrowRight className="size-4" />
-                </Button>
-            </form>
+            <CreateMessageForm />
 
-            <ol className="list-decimal list-outside px-3 space-y-8">
-                <Message
-                    text="Como funcionam as goroutines em GoLang e por que elas são importantes para a concorrência e paralelismo?"
-                    amountOfReactions={10}
-                    answered
-                />
-                <Message
-                    text="Como funcionam as goroutines em GoLang e por que elas são importantes para a concorrência e paralelismo?"
-                    amountOfReactions={10}
-                />
-            </ol>
+            <Suspense fallback={<p>Carregando...</p>}>
+                <Messages />
+            </Suspense>
         </div>
     )
 }
